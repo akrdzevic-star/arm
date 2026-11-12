@@ -24,7 +24,15 @@ jobs:
           sed -i 's#android:label="[^"]*"#android:label="Možda nema gužve"#' $M
       - name: Isključi Android Lint bug
         run: |
-          echo -e "\nandroid {\n    lint {\n        checkReleaseBuilds false\n        abortOnError false\n    }\n}" >> android/app/build.gradle.kts
+          cat << 'EOF' >> android/app/build.gradle.kts
+
+          android {
+              lint {
+                  checkReleaseBuilds = false
+                  abortOnError = false
+              }
+          }
+          EOF
       - run: flutter pub get
       - name: Ikona aplikacije
         run: dart run flutter_launcher_icons
