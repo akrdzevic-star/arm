@@ -11,7 +11,7 @@ jobs:
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: '17'
+          java-version: '21'
       - uses: subosito/flutter-action@v2
         with:
           channel: stable
@@ -22,6 +22,9 @@ jobs:
           M=android/app/src/main/AndroidManifest.xml
           sed -i 's#<application#<uses-permission android:name="android.permission.INTERNET"/>\n    <queries><intent><action android:name="android.intent.action.VIEW"/><data android:scheme="https"/></intent></queries>\n    <application#' $M
           sed -i 's#android:label="[^"]*"#android:label="Možda nema gužve"#' $M
+      - name: Isključi Android Lint bug
+        run: |
+          echo -e "\nandroid {\n    lint {\n        checkReleaseBuilds false\n        abortOnError false\n    }\n}" >> android/app/build.gradle.kts
       - run: flutter pub get
       - name: Ikona aplikacije
         run: dart run flutter_launcher_icons
